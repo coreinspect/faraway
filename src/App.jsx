@@ -1,10 +1,5 @@
-import PropTypes from 'prop-types';
-import { useState } from 'react';
-const initialItems = [
-  { id: 1, description: 'Passports', quantity: 2, packed: false },
-  { id: 2, description: 'Socks', quantity: 12, packed: true },
-  { id: 3, description: 'Charger', quantity: 1, packed: false },
-];
+import PropTypes from "prop-types";
+import { useState } from "react";
 
 export default function App() {
   const [items, setItems] = useState([]);
@@ -12,11 +7,15 @@ export default function App() {
     //new array of items, spread the using ...items from the props(item)
     setItems((items) => [...items, item]);
   }
+
+  function handleDeleteItem(id) {
+    setItems((items) => items.filter((item) => item.id !== id));
+  }
   return (
     <div className="app">
       <Logo />
       <Form onAddItems={handleAddItems} />
-      <PackingList items={items} />
+      <PackingList items={items} onDeleteItem={handleDeleteItem} />
       <Stats />
     </div>
   );
@@ -26,7 +25,7 @@ function Logo() {
   return <h1>🌴Far Away❤️</h1>;
 }
 function Form({ onAddItems }) {
-  const [description, setDescription] = useState('');
+  const [description, setDescription] = useState("");
   const [quantity, setQuantity] = useState(1);
 
   function handleSubmit(e) {
@@ -42,7 +41,7 @@ function Form({ onAddItems }) {
     onAddItems(newItem);
 
     //set the state to the default after adding new Item
-    setDescription('');
+    setDescription("");
     setQuantity(1);
   }
   return (
@@ -53,7 +52,8 @@ function Form({ onAddItems }) {
         onChange={(e) => {
           console.log(quantity);
           setQuantity(Number(e.target.value));
-        }}>
+        }}
+      >
         {Array.from({ length: 20 }, (_, i) => i + 1).map((num) => (
           <option value={num} key={num}>
             {num}
@@ -73,25 +73,28 @@ function Form({ onAddItems }) {
     </form>
   );
 }
-function PackingList({ items }) {
+function PackingList({ items, onDeleteItem }) {
   return (
     <div className="list">
       <ul>
         {items.map((item) => (
-          <Item item={item} key={item.id} />
+          <Item item={item} onDeleteItem={onDeleteItem} key={item.id} />
         ))}
       </ul>
     </div>
   );
 }
 
-function Item({ item }) {
+function Item({ item, onDeleteItem }) {
   return (
     <li>
-      <span style={item.packed ? { textDecoration: 'line-through' } : {}}>
+      <input type="checkbox" />
+      <span style={item.packed ? { textDecoration: "line-through" } : {}}>
         {item.quantity} {item.description}
       </span>
-      <button>❌</button>
+
+      {/* use fuction to avoid running immediately the code */}
+      <button onClick={() => onDeleteItem(item.id)}>❌</button>
     </li>
   );
 }
