@@ -24,29 +24,31 @@ function Form({ onAddItems }) {
   return (
     <form className="add-form" onSubmit={handleSubmit}>
       <h3>What do you need for your trip?</h3>
-      <select
-        value={quantity}
-        onChange={(e) => {
-          console.log(quantity);
-          setQuantity(Number(e.target.value));
-        }}
-      >
-        {Array.from({ length: 20 }, (_, i) => i + 1).map((num) => (
-          <option value={num} key={num}>
-            {num}
-          </option>
-        ))}
-      </select>
-      <input
-        type="text"
-        placeholder="Add an item"
-        //the default value is "" but change when user put something
-        // the value is set to the state
-        value={description}
-        // the value of the input is set to base on the state and target value
-        onChange={(e) => setDescription(e.target.value)}
-      />
-      <button>Add</button>
+      <div className="wrapper">
+        <select
+          value={quantity}
+          onChange={(e) => {
+            console.log(quantity);
+            setQuantity(Number(e.target.value));
+          }}
+        >
+          {Array.from({ length: 20 }, (_, i) => i + 1).map((num) => (
+            <option value={num} key={num}>
+              {num}
+            </option>
+          ))}
+        </select>
+        <input
+          type="text"
+          placeholder="Add an item"
+          //the default value is "" but change when user put something
+          // the value is set to the state
+          value={description}
+          // the value of the input is set to base on the state and target value
+          onChange={(e) => setDescription(e.target.value)}
+        />
+        <button>Add</button>
+      </div>
     </form>
   );
 }
